@@ -2,7 +2,7 @@
 
 **Elevating the Creator Experience through Intelligent Interface Design.**
 
-![Suno Flow Interface Preview](Pending deployment)
+![Suno Flow Interface Preview](https://github.com/user-attachments/assets/6ed50d0f-c6c4-4d0e-bce8-a86bfe9160f2)
 
 👉 **[Try the Live Demo Here](Vercel link pending deployment...)**
 
