@@ -4,7 +4,7 @@
 
 <img src="https://github.com/user-attachments/assets/6ed50d0f-c6c4-4d0e-bce8-a86bfe9160f2" alt="Suno Flow Interface Preview" width="400">
 
-👉 **[Try the Live Demo Here](Vercel link pending deployment...)**
+👉 **[Try the Live Demo Here](suno-flow-editor.vercel.app)**
 
 This prototype is a functional proposal for a next-generation lyrics editor for Suno AI. It demonstrates how moving beyond a plain text box can significantly reduce friction for creators, minimize syntax errors, and accelerate the "Idea to Song" workflow.
 
