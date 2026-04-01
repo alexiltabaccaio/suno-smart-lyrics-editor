@@ -18,27 +18,43 @@ export const INSTRUMENT_TAGS = [
 ];
 
 export const isStructureTag = (tag: string) => {
-  if (!tag.startsWith('[') || !tag.endsWith(']')) return false;
+  if (!tag.startsWith('[')) return false;
   const content = tag.replace(/[\[\]]/g, '').trim().toLowerCase();
   if (!content) return false;
-  return STRUCTURE_TAGS.some(t => content.includes(t.toLowerCase()));
+  
+  // Use word boundaries to avoid matching things like "universe" for "verse"
+  return STRUCTURE_TAGS.some(t => {
+    const term = t.toLowerCase();
+    const regex = new RegExp(`\\b${term}\\b`, 'i');
+    return regex.test(content);
+  });
 };
 
 export const isInstrumentTag = (tag: string) => {
+  if (!tag.startsWith('[')) return false;
   const content = tag.replace(/[\[\]]/g, '').trim().toLowerCase();
-  return INSTRUMENT_TAGS.some(t => t.toLowerCase() === content);
+  if (!content) return false;
+  
+  return INSTRUMENT_TAGS.some(t => {
+    const term = t.toLowerCase();
+    const regex = new RegExp(`\\b${term}\\b`, 'i');
+    return regex.test(content);
+  });
 };
 
 export const getNextTag = (currentTag: string, direction: 'next' | 'prev'): string => {
   const content = currentTag.replace(/[\[\]]/g, '').trim().toLowerCase();
-  const isClosed = currentTag.endsWith(']');
   
   // Find exact match first
   let currentIndex = STRUCTURE_TAGS.findIndex(t => t.toLowerCase() === content);
   
   // If no exact match, look for a base tag within the custom tag (e.g., "slow chorus" -> "Chorus")
   if (currentIndex === -1) {
-    currentIndex = STRUCTURE_TAGS.findIndex(t => content.includes(t.toLowerCase()));
+    currentIndex = STRUCTURE_TAGS.findIndex(t => {
+      const term = t.toLowerCase();
+      const regex = new RegExp(`\\b${term}\\b`, 'i');
+      return regex.test(content);
+    });
   }
   
   // If still no match, don't change it
@@ -48,7 +64,8 @@ export const getNextTag = (currentTag: string, direction: 'next' | 'prev'): stri
     ? (currentIndex + 1) % STRUCTURE_TAGS.length
     : (currentIndex - 1 + STRUCTURE_TAGS.length) % STRUCTURE_TAGS.length;
   
-  return `[${STRUCTURE_TAGS[nextIndex]}${isClosed ? ']' : ''}`;
+  // Always return a properly closed tag
+  return `[${STRUCTURE_TAGS[nextIndex]}]`;
 };
 
 export const getSuggestedNextTag = (allTags: string[]): string => {
@@ -57,17 +74,19 @@ export const getSuggestedNextTag = (allTags: string[]): string => {
   const lastTag = allTags[allTags.length - 1].toLowerCase();
   
   // Count occurrences of main structure tags to identify the pattern
-  const verseCount = allTags.filter(t => t.toLowerCase().includes('verse')).length;
-  const chorusCount = allTags.filter(t => t.toLowerCase().includes('chorus')).length;
+  const verseCount = allTags.filter(t => /\bverse\b/i.test(t)).length;
+  const chorusCount = allTags.filter(t => /\bchorus\b/i.test(t)).length;
   
   // Logic based on the requested progression:
   // Verse -> Chorus -> Verse -> Chorus -> Bridge -> Outro
   
-  if (lastTag.includes('outro')) return 'Outro';
-  if (lastTag.includes('bridge')) return 'Outro';
-  if (lastTag.includes('solo')) return 'Chorus';
+  const hasTag = (tag: string, term: string) => new RegExp(`\\b${term}\\b`, 'i').test(tag);
+
+  if (hasTag(lastTag, 'outro')) return 'Outro';
+  if (hasTag(lastTag, 'bridge')) return 'Outro';
+  if (hasTag(lastTag, 'solo')) return 'Chorus';
   
-  if (lastTag.includes('chorus')) {
+  if (hasTag(lastTag, 'chorus')) {
     // If we've already had 2 verses and 2 choruses, suggest Bridge
     if (verseCount >= 2 && chorusCount >= 2) {
       return 'Bridge';
@@ -75,15 +94,15 @@ export const getSuggestedNextTag = (allTags: string[]): string => {
     return 'Verse';
   }
   
-  if (lastTag.includes('verse')) {
+  if (hasTag(lastTag, 'verse')) {
     return 'Chorus';
   }
   
   // Fallback for other tags
-  if (lastTag.includes('intro')) return 'Verse';
-  if (lastTag.includes('pre-chorus')) return 'Chorus';
-  if (lastTag.includes('post-chorus')) return 'Verse';
-  if (lastTag.includes('hook')) return 'Chorus';
+  if (hasTag(lastTag, 'intro')) return 'Verse';
+  if (hasTag(lastTag, 'pre-chorus')) return 'Chorus';
+  if (hasTag(lastTag, 'post-chorus')) return 'Verse';
+  if (hasTag(lastTag, 'hook')) return 'Chorus';
   
   return 'Verse';
 };

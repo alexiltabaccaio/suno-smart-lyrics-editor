@@ -15,24 +15,17 @@ export function useSmartInsert(
     if (lineIdx !== undefined) {
       const lines = value.split('\n');
       
-      // Special case: if we are on the first line and there are no structure tags in the document yet,
-      // we should insert at the very beginning (pos 0) to "tag" the existing text.
-      const hasAnyTags = value.match(/\[([^\]]+)\]/g)?.some(t => isStructureTag(t));
-      if (lineIdx === 0 && !hasAnyTags) {
-        insertPos = 0;
-      } else {
-        // Find the end of the current section (until the next structure tag starts or EOF)
-        let endLineIdx = lineIdx + 1;
-        while (endLineIdx < lines.length) {
-          const line = lines[endLineIdx].trim();
-          if (line.startsWith('[') && isStructureTag(line)) {
-            break;
-          }
-          endLineIdx++;
+      // Find the end of the current section (until the next structure tag starts or EOF)
+      let endLineIdx = lineIdx + 1;
+      while (endLineIdx < lines.length) {
+        const line = lines[endLineIdx].trim();
+        if (line.startsWith('[') && isStructureTag(line)) {
+          break;
         }
-        // Calculate character position at the end of the section
-        insertPos = lines.slice(0, endLineIdx).join('\n').length;
+        endLineIdx++;
       }
+      // Calculate character position at the end of the section
+      insertPos = lines.slice(0, endLineIdx).join('\n').length;
     } else {
       insertPos = textarea?.selectionStart ?? value.length;
     }

@@ -88,11 +88,8 @@ export const FormattedTextarea = forwardRef<FormattedTextareaRef, FormattedTexta
     });
 
     const textBeforeCursor = value.substring(0, cursorPos);
-    let activeLineIndex = textBeforeCursor.split('\n').length - 1;
-    if (textBeforeCursor.endsWith('\n') && cursorPos > 0) {
-      activeLineIndex = Math.max(0, activeLineIndex - 1);
-    }
-
+    const activeLineIndex = textBeforeCursor.split('\n').length - 1;
+    
     const displayLineIdx = hoverLineIdx !== -1 
       ? Math.min(hoverLineIdx, lines.length - 1) 
       : activeLineIndex;
@@ -113,8 +110,18 @@ export const FormattedTextarea = forwardRef<FormattedTextareaRef, FormattedTexta
       const isTagLine = displayLineIdx !== -1 && lineIdx === activeTagLineIdx;
       
       const showArrows = !readOnly && isTagLine;
-      // Show plus on the tag line, OR on the first line if no tags exist yet and we are hovering the top area
-      const showPlus = !readOnly && (isTagLine || (lineIdx === 0 && activeTagLineIdx === -1 && isHoveredLine));
+      
+      const isLineEmpty = lineParts.every(p => p.part.trim() === "");
+      const isDocEmpty = value.trim() === "";
+
+      // Show plus on the tag line, OR on the hovered line if no tags exist yet AND it's not a "ghost" empty line
+      // (We allow it on the first line, or if the line has content, or if it's the current cursor line)
+      // Special case: if the document is empty, always show on the first line
+      const showPlus = !readOnly && (
+        isTagLine || 
+        (isDocEmpty && lineIdx === 0) ||
+        (activeTagLineIdx === -1 && isHoveredLine && (lineIdx === 0 || !isLineEmpty || lineIdx === activeLineIndex))
+      );
 
       return (
         <div key={lineIdx} className="relative group/line">
