@@ -4,9 +4,9 @@
 
 👉 **[Try the Live Demo Here](https://suno-smart-lyrics-editor.vercel.app/)**
 
-**Hey everyone, I got tired of wasting credits because of missing brackets or misspelled tags in the lyrics box, so I built a functional prototype for a "Smart Editor" for Suno Web.**
+**As a frequent Suno creator, I wanted to solve the frustration of failed generations caused by simple formatting mistakes. This project is a proof of concept for a smarter, more intuitive lyrics editor.**
 
-This is a proof of concept showing how a smarter UI can reduce friction for creators, minimize syntax errors, and accelerate the "Idea to Song" workflow. 
+It demonstrates how an intelligent UI can reduce friction for creators, minimize syntax errors, and accelerate the "Idea to Song" workflow. 
 
 ---
 
