@@ -48,4 +48,9 @@ The goal of this prototype is to show that the editor shouldn't just be a place 
 
 ---
 
+## 🏷️ Tags
+`react` • `tailwind-css` • `suno-ai` • `lyrics-editor` • `ux-design` • `typescript` • `songwriting`
+
+---
+
 *Prototype developed by [Alex Giustizieri](https://www.linkedin.com/in/alexgiustizieri/)*

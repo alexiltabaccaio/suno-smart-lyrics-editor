@@ -3,6 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "keywords": [
+    "suno-ai",
+    "lyrics-editor",
+    "ux-design",
+    "react",
+    "typescript",
+    "tailwind-css",
+    "songwriting",
+    "intelligent-ui"
+  ],
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
