@@ -53,4 +53,9 @@ The goal of this prototype is to show that the editor shouldn't just be a place 
 
 ---
 
+## 📄 License
+Distributed under the MIT License. See LICENSE for more information.
+
+---
+
 *Prototype developed by [Alex Giustizieri](https://www.linkedin.com/in/alexgiustizieri/)*
